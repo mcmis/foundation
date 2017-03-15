@@ -1,0 +1,28 @@
+{
+    "name": "mcmis/foundation",
+    "description": "The foundation package for MCMIS",
+    "type": "mcmis-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Farhan Wazir",
+            "email": "farhan.wazir@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9",
+        "laravel/framework" : "5.2.*",
+        "mcmis/base" : "0.4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "MCMIS\\Foundation\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.5.x-dev"
+        }
+    },
+    "minimum-stability": "stable"
+}
