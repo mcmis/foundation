@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Traits\Complain;
+namespace MCMIS\Foundation\Traits\Complain;
 
 
 use App\ComplaintPhotos;

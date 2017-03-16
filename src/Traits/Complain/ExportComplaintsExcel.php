@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Traits\Complain;
+namespace MCMIS\Foundation\Traits\Complain;
 
 
 use Illuminate\Http\Request;
