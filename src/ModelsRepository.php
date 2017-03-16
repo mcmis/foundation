@@ -20,7 +20,7 @@ class ModelsRepository
     {
         $this->models = $models;
         foreach ($models as $alias => $model) {
-            $this->register($model);
+            $this->register($alias);
         }
     }
 
