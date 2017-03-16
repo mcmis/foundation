@@ -15,7 +15,7 @@ class Register
      */
     public function bootstrap(Application $app){
         $app->singleton('models', function($app){
-            new ModelsRepository($app);
+            return new ModelsRepository($app);
         });
     }
 
