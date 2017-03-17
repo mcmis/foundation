@@ -4,7 +4,7 @@ namespace MCMIS\Foundation\Base\User\Notice;
 
 use MCMIS\Foundation\BaseModel;
 
-class UserNoticeReceiver extends BaseModel
+class Model extends BaseModel
 {
     protected $fillable = [
         'user_notice_id', 'user_id', 'seen'
