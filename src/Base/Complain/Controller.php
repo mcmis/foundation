@@ -11,7 +11,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use MCMIS\Foundation\Traits\Complain\ExportComplaintsExcel;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Foundation\Bus\DispatchesJobs;
 use Auth;
 use MCMIS\Foundation\BaseController;
 

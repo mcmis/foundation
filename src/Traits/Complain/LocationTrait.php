@@ -1,12 +1,8 @@
 <?php
 namespace MCMIS\Foundation\Traits\Complain;
 
-use App\LsArea;
-use App\LsStreet;
-use App\PresetLocation;
 use FarhanWazir\GoogleMaps\GMaps;
 use Illuminate\Support\Facades\Input;
-use Ixudra\Curl\Facades\Curl;
 
 trait LocationTrait
 {
@@ -78,13 +74,13 @@ trait LocationTrait
     }
 
     public function manualLocationField($default = false){
-        $areas = LsArea::all();
+        $areas = app('model.location.area')->all();
         $areas_list = ['' => 'None'];
         foreach($areas as $area){
             $areas_list[$area->id] = $area->name;
         }
 
-        $preset_locations = PresetLocation::all();
+        $preset_locations = app('model.location.preset')->all();
         $preset_location_list = ['' => 'None'];
         foreach($preset_locations as $preset_location){
             $preset_location_list[$preset_location->id] = $preset_location->title;
@@ -100,25 +96,17 @@ trait LocationTrait
     }
 
     public function manualPresetLocationField($default = false){
-        $item = PresetLocation::findOrFail($default);
+        $item = app('model.location.preset')->findOrFail($default);
 
         return view('acciones.complain.partial.form.location_park', [
             'item' => $item,
         ]);
     }
 
-    public function createAddressFromStreetID($id, $number){
-        $street = LsStreet::findOrFail($id);
-        return (!empty($number)? $number . ' ' : '') . $street->name . ', '
-            . $street->block->name . ', ' . $street->block->area->name . ', '
-            . config('csys.coverage.data.'.config('csys.coverage.type'))
-            . ((config('csys.coverage.type') != 'country')? ', ' . config('csys.coverage.data.country') : '');
-    }
-
     public function getLatlngFromGoogle($q = false){
         $q = !$q ? Input::get('address') : $q;
 
-        $req = Curl::to('https://maps.googleapis.com/maps/api/geocode/json')
+        $req = app('Curl')->to('https://maps.googleapis.com/maps/api/geocode/json')
             ->withData([
                 'language' => config('csys.lang'),
                 'address' => $this->createAddressFromStreetID($q['street_id'], (isset($q['street_number'])?
@@ -131,10 +119,19 @@ trait LocationTrait
         return false;
     }
 
+    public function createAddressFromStreetID($id, $number)
+    {
+        $street = app('model.location.street')->findOrFail($id);
+        return (!empty($number) ? $number . ' ' : '') . $street->name . ', '
+            . $street->block->name . ', ' . $street->block->area->name . ', '
+            . config('csys.coverage.data.' . config('csys.coverage.type'))
+            . ((config('csys.coverage.type') != 'country') ? ', ' . config('csys.coverage.data.country') : '');
+    }
+
     public function getAddressFromGoogle($q = false){
         $q = !$q ? Input::get('latlng') : $q;
 
-        $req = Curl::to('https://maps.googleapis.com/maps/api/geocode/json')
+        $req = app('Curl')->to('https://maps.googleapis.com/maps/api/geocode/json')
             ->withData([
                 'language' => config('csys.lang'),
                 'latlng' => $q

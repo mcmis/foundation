@@ -1,8 +1,6 @@
 <?php
 namespace MCMIS\Foundation\Traits\Complain;
 
-
-use App\ComplaintPhotos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image;
@@ -25,7 +23,7 @@ trait PhotoTrait
                     if($request->request->has('uri'))
                         $request->request->set('uri', $name);
                     else $request->request->add(['uri' => $name]);
-                    ComplaintPhotos::create($request->only(['uri', 'complaint_id', 'user_id', 'caption']));
+                    app('model.complain.photo')->create($request->only(['uri', 'complaint_id', 'user_id', 'caption']));
                 }
             }
         }

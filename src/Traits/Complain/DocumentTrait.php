@@ -1,12 +1,8 @@
 <?php
 namespace MCMIS\Foundation\Traits\Complain;
 
-
-use App\ComplaintDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait DocumentTrait
 {
@@ -25,7 +21,7 @@ trait DocumentTrait
                         $request->request->set('uri', $name);
                     else $request->request->add(['uri' => $name]);
                     $request->request->set('caption', $document->getClientOriginalName());
-                    ComplaintDocument::create($request->only(['uri', 'complaint_id', 'user_id', 'caption']));
+                    app('model.complain.document')->create($request->only(['uri', 'complaint_id', 'user_id', 'caption']));
                 }
             }
         }

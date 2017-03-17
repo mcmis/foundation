@@ -11,7 +11,12 @@
     ],
     "require": {
         "php": ">=5.5.9",
-        "mcmis/base" : "0.5.*"
+      "mcmis/base": "0.5.*",
+      "farhanwazir/laravelgooglemaps": "^2.3",
+      "ixudra/curl": "^6.4",
+      "intervention/image": "^2.3",
+      "intervention/imagecache": "^2.3",
+      "zizaco/entrust": "^1.7"
     },
     "autoload": {
         "psr-4": {
