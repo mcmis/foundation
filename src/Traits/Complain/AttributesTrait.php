@@ -2,6 +2,8 @@
 
 namespace MCMIS\Foundation\Traits\Complain;
 
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 trait AttributesTrait
 {

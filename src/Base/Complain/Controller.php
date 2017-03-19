@@ -2,7 +2,6 @@
 
 namespace MCMIS\Foundation\Base\Complain;
 
-
 use MCMIS\Foundation\Traits\Complain\DocumentTrait;
 use MCMIS\Foundation\Traits\Complain\ListingTrait;
 use MCMIS\Foundation\Traits\Complain\LocationTrait;
@@ -76,7 +75,7 @@ class Controller extends BaseController
     }
 
     public function complaintsUnassignedCounter(){
-        return app('model.unassignment')->count();
+        return app('model.complain.unassigned')->count();
     }
 
     public function seen($complain_no){

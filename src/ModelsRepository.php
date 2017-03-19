@@ -14,6 +14,12 @@ class ModelsRepository
     public function __construct($app)
     {
         $this->app = $app;
+        $this->withBootstrap();
+    }
+
+    protected function withBootstrap()
+    {
+        (new DependencyProviders($this->app))->register();
     }
 
     public function load($models)
@@ -22,11 +28,6 @@ class ModelsRepository
         foreach ($models as $alias => $model) {
             $this->register($alias);
         }
-    }
-
-    public function has($model)
-    {
-        return isset($this->models[$model]) && !is_null($this->models[$model]);
     }
 
     public function register($model)
@@ -48,17 +49,22 @@ class ModelsRepository
         return $this->registeredModels[$key] = 'model.' . $key;
     }
 
-    public function isRegistered($model)
-    {
-        return isset($this->registeredModels[$model]);
-    }
-
     protected function furnishBaseNamespace($model)
     {
         $extracted_name = implode('\\', array_map(function($val){
             return studly_case($val);
         }, explode('.', $model)));
         return 'MCMIS\Foundation\Base\\' . $extracted_name . '\Model';
+    }
+
+    public function has($model)
+    {
+        return isset($this->models[$model]) && !is_null($this->models[$model]);
+    }
+
+    public function isRegistered($model)
+    {
+        return isset($this->registeredModels[$model]);
     }
 
 }

@@ -4,6 +4,7 @@ namespace MCMIS\Foundation\Traits\Complain;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use MCMIS\Foundation\Base\Report\Controller;
 
 trait ListingTrait
@@ -209,9 +210,6 @@ trait ListingTrait
             }
             $filters_data_container['categories'] = $categories;
         }
-
-        //change array date to string
-        //if($request->has('dates')) $request->request->set('dates', implode(' - ', $request->dates));
 
         $filters_data_container['filters'] = $request->all();
 

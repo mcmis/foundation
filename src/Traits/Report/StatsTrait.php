@@ -2,9 +2,6 @@
 
 namespace MCMIS\Foundation\Traits\Report;
 
-
-use App\ComplainCategories;
-use App\ComplainStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -64,18 +61,18 @@ trait StatsTrait
 
     public function getStatuses($id = null)
     {
-        $statuses = ComplainStatus::orderBy('id');
+        $statuses = app('model.status')->orderBy('id');
         if ($id) $statuses = $statuses->where('id', '=', $id);
         return $statuses->get();
     }
 
     public function getCategories($id = null)
     {
-        $no_child_cat = ComplainCategories::whereDoesntHave('children')->where('parent', '=', 0)->get()->lists('id');
+        $no_child_cat = app('model.category')->whereDoesntHave('children')->where('parent', '=', 0)->get()->lists('id');
         if ($id) {
-            $categories = ComplainCategories::where('id', '=', $id)->get();
+            $categories = app('model.category')->where('id', '=', $id)->get();
         } else {
-            $categories = ComplainCategories::where('parent', '>', '0')->orWhere(function ($query) use ($no_child_cat) {
+            $categories = app('model.category')->where('parent', '>', '0')->orWhere(function ($query) use ($no_child_cat) {
                 $query->whereIn('id', $no_child_cat->toArray());
             })->get();
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace MCMIS\Foundation\Base\Source;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MCMIS\Foundation\BaseModel;

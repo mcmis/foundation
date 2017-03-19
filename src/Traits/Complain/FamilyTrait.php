@@ -2,10 +2,6 @@
 
 namespace MCMIS\Foundation\Traits\Complain;
 
-
-use App\Models\Organization\Department;
-use Illuminate\Support\Facades\Auth;
-
 trait FamilyTrait
 {
     public function hasChild()
