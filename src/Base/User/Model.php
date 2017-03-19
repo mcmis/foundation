@@ -82,7 +82,7 @@ class Model extends Authenticatable
 
     public function notices()
     {
-        return $this->belongsToMany(app('model.user.notice'), 'user_notice_receivers')->withPivot('seen', 'id');
+        return $this->belongsToMany(app('model.notice'), 'user_notice_receivers')->withPivot('seen', 'id');
     }
 
 }
