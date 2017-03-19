@@ -9,12 +9,14 @@ class Model extends BaseModel
 {
     use SoftDeletes;
 
+    protected $table = 'departments';
+
     protected $fillable = [
         'name', 'description', 'shortcode', 'type'
     ];
 
     public function employees()
     {
-        return $this->belongsToMany(app('model.company.employee'), 'employee_department');
+        return $this->belongsToMany(sys('model.company.employee'), 'employee_department');
     }
 }

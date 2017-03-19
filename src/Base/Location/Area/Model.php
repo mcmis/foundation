@@ -14,6 +14,6 @@ class Model extends BaseModel
 
     public function blocks()
     {
-        return $this->hasMany(app('model.location.block'), 'area_id');
+        return $this->hasMany(sys('model.location.block'), 'area_id');
     }
 }

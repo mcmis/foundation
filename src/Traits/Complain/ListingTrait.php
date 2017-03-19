@@ -12,18 +12,18 @@ trait ListingTrait
 
     public function index(Request $request, $pagination = true, $export = false){
         if(Auth::user()->hasRole('operator')){
-            $items = app('model.complain')->orderBy('complaint.updated_at', 'desc');
+            $items = sys('model.complain')->orderBy('complaint.updated_at', 'desc');
         }elseif(Auth::user()->hasRole('supervisor')){
-            $items = app('model.complain')->whereHas('assignments', function ($q) {
+            $items = sys('model.complain')->whereHas('assignments', function ($q) {
                 $q->whereIn('department_id', Auth::user()->departments()->lists('id'));
             })->orderBy('complaint.updated_at', 'desc');
 
         }elseif(Auth::user()->hasRole('fieldworker')){
-            $items = app('model.complain')->whereHas('assignments', function ($q) {
+            $items = sys('model.complain')->whereHas('assignments', function ($q) {
                 $q->whereIn('employee_id', Auth::user()->employee->lists('id'));
             })->orderBy('complaint.updated_at', 'desc');
         }else
-            $items = app('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
+            $items = sys('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
                 ->latestFirst()->statusReceived();
 
         /* Add Filters to Model */
@@ -88,24 +88,24 @@ trait ListingTrait
     public function get(Request $request, $status, $department = null, $pagination = true, $export = false)
     {
         if (Auth::user()->hasRole('admin') || Auth::user()->hasRole('operator'))
-            $items = app('model.complain')->whereHas('state', function ($q) use ($status) {
+            $items = sys('model.complain')->whereHas('state', function ($q) use ($status) {
                 $q->where('short_code', '=', $status);
             })->latestFirst();
         elseif (Auth::user()->hasRole('supervisor')) {
-            $items = app('model.complain')->whereHas('state', function ($q) use ($status) {
+            $items = sys('model.complain')->whereHas('state', function ($q) use ($status) {
                 $q->where('short_code', '=', $status);
             })->whereHas('assignments', function ($q) use ($department) {
                 $q->whereIn('department_id', ($department ? [$department] : Auth::user()->departments()->lists('id')));
             })->latestFirst();
 
         } elseif (Auth::user()->hasRole('fieldworker'))
-            $items = app('model.complain')->whereHas('state', function ($q) use ($status) {
+            $items = sys('model.complain')->whereHas('state', function ($q) use ($status) {
                 $q->where('short_code', '=', $status);
             })->whereHas('assignments', function ($q) {
                 $q->whereIn('employee_id', Auth::user()->employee->lists('id'));
             })->latestFirst();
         else
-            $items = app('model.complain')->whereHas('state', function ($q) use ($status) {
+            $items = sys('model.complain')->whereHas('state', function ($q) use ($status) {
                 $q->where('short_code', '=', $status);
             })->where('user_id', '=', Auth::user()->id)->latestFirst();
 
@@ -143,14 +143,14 @@ trait ListingTrait
         $user_is_super = $filters_data_container['user_is_super'] = $user->hasDepartments();
 
         if ($user->hasRole('operator')) {
-            $sources_raw = app('model.source')->get();
+            $sources_raw = sys('model.source')->get();
             $sources = ['' => 'All'];
             foreach ($sources_raw as $source) {
                 $sources[$source->id] = $source->title;
             }
             $filters_data_container['sources'] = $sources;
 
-            $operators_raw = app('model.user')->whereHas('roles', function ($query) { //commented, it will make problem in lots of user scenario
+            $operators_raw = sys('model.user')->whereHas('roles', function ($query) { //commented, it will make problem in lots of user scenario
                 $query->where('name', '=', 'operator');
             })->has('employee')->get();
             $operators = ['' => 'All'];
@@ -161,7 +161,7 @@ trait ListingTrait
         }
 
         if (($user->hasRole('supervisor') && !$user_is_super)) {
-            $fieldworkers_raw = app('model.company.employee')->whereHas('users', function ($query) { //commented, it will make problem in lots of user scenario
+            $fieldworkers_raw = sys('model.company.employee')->whereHas('users', function ($query) { //commented, it will make problem in lots of user scenario
                 $query->whereHas('roles', function ($q) {
                     $q->where('name', '=', 'fieldworker');
                 });
@@ -176,21 +176,21 @@ trait ListingTrait
         }
 
         if ($user->hasRole('supervisor') || $user->hasRole('fieldworker')) {
-            $colonies_raw = app('model.complain.location')->select('area')->groupBy('area')->get();
+            $colonies_raw = sys('model.complain.location')->select('area')->groupBy('area')->get();
             $colonies = ['' => 'All'];
             foreach ($colonies_raw as $colony) {
                 $colonies[$colony->area] = $colony->area;
             }
             $filters_data_container['colonies'] = $colonies;
 
-            $blocks_raw = app('model.complain.location')->select('block')->groupBy('block')->get();
+            $blocks_raw = sys('model.complain.location')->select('block')->groupBy('block')->get();
             $blocks = ['' => 'All'];
             foreach ($blocks_raw as $block) {
                 $blocks[$block->block] = $block->block;
             }
             $filters_data_container['blocks'] = $blocks;
 
-            $streets_raw = app('model.complain.location')->select('street')->groupBy('street')->get();
+            $streets_raw = sys('model.complain.location')->select('street')->groupBy('street')->get();
             $streets = ['' => 'All'];
             foreach ($streets_raw as $street) {
                 $streets[$street->street] = $street->street;
@@ -199,8 +199,8 @@ trait ListingTrait
         }
 
         if ($user->hasRole('fieldworker') || $user_is_super) {
-            $no_child_cat = app('model.category')->whereDoesntHave('children')->where('parent', '=', 0)->get()->lists('id');
-            $filtered_categories = app('model.category')->where('parent', '>', '0')
+            $no_child_cat = sys('model.category')->whereDoesntHave('children')->where('parent', '=', 0)->get()->lists('id');
+            $filtered_categories = sys('model.category')->where('parent', '>', '0')
                 ->orWhere(function ($query) use ($no_child_cat) {
                     $query->whereIn('id', $no_child_cat->toArray());
                 })->get();
@@ -218,20 +218,20 @@ trait ListingTrait
 
     public function verifiedIndex(Request $request, $department = null, $pagination = true, $export = false){
         if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('operator'))
-            $items = app('model.complain')->latestFirst()->statusVerified();
+            $items = sys('model.complain')->latestFirst()->statusVerified();
         elseif(Auth::user()->hasRole('supervisor')){
-            $items = app('model.complain')->leftJoin('complaint_assignments', function ($join) {
+            $items = sys('model.complain')->leftJoin('complaint_assignments', function ($join) {
                 $join->on('complaint_assignments.complaint_id', '=', 'complaint.id');
             })->latestFirst()->statusVerified()
                 ->whereIn('complaint_assignments.department_id', ($department ? [$department] : Auth::user()->departments()->lists('id')))
                 ->groupBy('complaint_assignments.complaint_id');
 
         }elseif(Auth::user()->hasRole('fieldworker'))
-            $items = app('model.complain')->whereHas('assignments', function ($q) {
+            $items = sys('model.complain')->whereHas('assignments', function ($q) {
                 $q->whereIn('employee_id', Auth::user()->employee->lists('id'));
             })->latestFirst()->statusVerified();
         else
-            $items = app('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
+            $items = sys('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
                 ->latestFirst()->statusVerified();
 
         /* Add Filters to Model */
@@ -257,20 +257,20 @@ trait ListingTrait
 
     public function processIndex(Request $request, $department = null, $pagination = true, $export = false){
         if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('operator'))
-            $items = app('model.complain')->latestFirst()->statusInprocess();
+            $items = sys('model.complain')->latestFirst()->statusInprocess();
         elseif(Auth::user()->hasRole('supervisor')){
-            $items = app('model.complain')->leftJoin('complaint_assignments', function ($join) {
+            $items = sys('model.complain')->leftJoin('complaint_assignments', function ($join) {
                 $join->on('complaint_assignments.complaint_id', '=', 'complaint.id');
             })->latestFirst()->statusInprocess()
                 ->whereIn('complaint_assignments.department_id', ($department ? [$department] : Auth::user()->departments()->lists('id')))
                 ->groupBy('complaint_assignments.complaint_id');
 
         }elseif(Auth::user()->hasRole('fieldworker'))
-            $items = app('model.complain')->whereHas('assignments', function ($q) {
+            $items = sys('model.complain')->whereHas('assignments', function ($q) {
                 $q->whereIn('employee_id', Auth::user()->employee->lists('id'));
             })->latestFirst()->statusInprocess();
         else
-            $items = app('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
+            $items = sys('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
                 ->latestFirst()->statusInprocess();
 
         /* Add Filters to Model */
@@ -296,20 +296,20 @@ trait ListingTrait
 
     public function discardIndex(Request $request, $department = null, $pagination = true, $export = false){
         if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('operator'))
-            $items = app('model.complain')->latestFirst()->statusDiscard();
+            $items = sys('model.complain')->latestFirst()->statusDiscard();
         elseif(Auth::user()->hasRole('supervisor')){
-            $items = app('model.complain')->leftJoin('complaint_assignments', function ($join) {
+            $items = sys('model.complain')->leftJoin('complaint_assignments', function ($join) {
                 $join->on('complaint_assignments.complaint_id', '=', 'complaint.id');
             })->latestFirst()->statusDiscard()
                 ->whereIn('complaint_assignments.department_id', ($department ? [$department] : Auth::user()->departments()->lists('id')))
                 ->groupBy('complaint_assignments.complaint_id');
 
         }elseif(Auth::user()->hasRole('fieldworker'))
-            $items = app('model.complain')->whereHas('assignments', function ($q) {
+            $items = sys('model.complain')->whereHas('assignments', function ($q) {
                 $q->whereIn('employee_id', Auth::user()->employee->lists('id'));
             })->latestFirst()->statusDiscard();
         else
-            $items = app('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
+            $items = sys('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
                 ->latestFirst()->statusDiscard();
 
         /* Add Filters to Model */
@@ -335,20 +335,20 @@ trait ListingTrait
 
     public function failedIndex(Request $request, $department = null, $pagination = true, $export = false){
         if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('operator'))
-            $items = app('model.complain')->latestFirst()->statusFailed();
+            $items = sys('model.complain')->latestFirst()->statusFailed();
         elseif(Auth::user()->hasRole('supervisor')){
-            $items = app('model.complain')->leftJoin('complaint_assignments', function ($join) {
+            $items = sys('model.complain')->leftJoin('complaint_assignments', function ($join) {
                 $join->on('complaint_assignments.complaint_id', '=', 'complaint.id');
             })->latestFirst()->statusFailed()
                 ->whereIn('complaint_assignments.department_id', ($department ? [$department] : Auth::user()->departments()->lists('id')))
                 ->groupBy('complaint_assignments.complaint_id');
 
         }elseif(Auth::user()->hasRole('fieldworker'))
-            $items = app('model.complain')->whereHas('assignments', function ($q) {
+            $items = sys('model.complain')->whereHas('assignments', function ($q) {
                 $q->whereIn('employee_id', Auth::user()->employee->lists('id'));
             })->latestFirst()->statusFailed();
         else
-            $items = app('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
+            $items = sys('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
                 ->latestFirst()->statusFailed();
 
         /* Add Filters to Model */
@@ -374,20 +374,20 @@ trait ListingTrait
 
     public function pendingIndex(Request $request, $department = null, $pagination = true, $export = false){
         if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('operator'))
-            $items = app('model.complain')->latestFirst()->statusPending();
+            $items = sys('model.complain')->latestFirst()->statusPending();
         elseif(Auth::user()->hasRole('supervisor')){
-            $items = app('model.complain')->leftJoin('complaint_assignments', function ($join) {
+            $items = sys('model.complain')->leftJoin('complaint_assignments', function ($join) {
                 $join->on('complaint_assignments.complaint_id', '=', 'complaint.id');
             })->latestFirst()->statusPending()
                 ->whereIn('complaint_assignments.department_id', ($department ? [$department] : Auth::user()->departments()->lists('id')))
                 ->groupBy('complaint_assignments.complaint_id');
 
         }elseif(Auth::user()->hasRole('fieldworker'))
-            $items = app('model.complain')->whereHas('assignments', function ($q) {
+            $items = sys('model.complain')->whereHas('assignments', function ($q) {
                 $q->whereIn('employee_id', Auth::user()->employee->lists('id'));
             })->latestFirst()->statusPending();
         else
-            $items = app('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
+            $items = sys('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
                 ->latestFirst()->statusPending();
 
         /* Add Filters to Model */
@@ -416,20 +416,20 @@ trait ListingTrait
      */
     public function resolvedIndex(Request $request, $department = null, $pagination = true, $export = false){
         if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('operator'))
-            $items = app('model.complain')->latestFirst()->statusResolved();
+            $items = sys('model.complain')->latestFirst()->statusResolved();
         elseif(Auth::user()->hasRole('supervisor')) {
-            $items = app('model.complain')->leftJoin('complaint_assignments', function ($join) {
+            $items = sys('model.complain')->leftJoin('complaint_assignments', function ($join) {
                 $join->on('complaint_assignments.complaint_id', '=', 'complaint.id');
             })->latestFirst()->statusResolved()
                 ->whereIn('complaint_assignments.department_id', ($department ? [$department] : Auth::user()->departments()->lists('id')))
                 ->groupBy('complaint_assignments.complaint_id');
 
         }elseif(Auth::user()->hasRole('fieldworker'))
-            $items = app('model.complain')->whereHas('assignments', function ($q) {
+            $items = sys('model.complain')->whereHas('assignments', function ($q) {
                 $q->whereIn('employee_id', Auth::user()->employee->lists('id'));
             })->latestFirst()->statusResolved();
         else
-            $items = app('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
+            $items = sys('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
                 ->latestFirst()->statusResolved();
 
         /* Add Filters to Model */
@@ -455,20 +455,20 @@ trait ListingTrait
 
     public function rescheduleIndex(Request $request, $department = null, $pagination = true, $export = false){
         if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('operator'))
-            $items = app('model.complain')->latestFirst()->statusReschedule();
+            $items = sys('model.complain')->latestFirst()->statusReschedule();
         elseif(Auth::user()->hasRole('supervisor')) {
-            $items = app('model.complain')->leftJoin('complaint_assignments', function ($join) {
+            $items = sys('model.complain')->leftJoin('complaint_assignments', function ($join) {
                 $join->on('complaint_assignments.complaint_id', '=', 'complaint.id');
             })->latestFirst()->statusReschedule()
                 ->whereIn('complaint_assignments.department_id', ($department ? [$department] : Auth::user()->departments()->lists('id')))
                 ->groupBy('complaint_assignments.complaint_id');
 
         }elseif(Auth::user()->hasRole('fieldworker'))
-            $items = app('model.complain')->whereHas('assignments', function ($q) {
+            $items = sys('model.complain')->whereHas('assignments', function ($q) {
                 $q->whereIn('employee_id', Auth::user()->employee->lists('id'));
             })->latestFirst()->statusReschedule();
         else
-            $items = app('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
+            $items = sys('model.complain')->where('user_id', '=', DB::raw(Auth::user()->id))
                 ->latestFirst()->statusReschedule();
 
         /* Add Filters to Model */
@@ -494,7 +494,7 @@ trait ListingTrait
 
     public function unassignedIndex(){
         if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('operator'))
-            $items = app('model.complain')->latestFirst()->onlyUnassigned()->paginate(config('csys.settings.pagination.complaints'));
+            $items = sys('model.complain')->latestFirst()->onlyUnassigned()->paginate(config('csys.settings.pagination.complaints'));
         else abort(403);
 
         return view('acciones.complain.list', [

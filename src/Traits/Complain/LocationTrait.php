@@ -74,13 +74,13 @@ trait LocationTrait
     }
 
     public function manualLocationField($default = false){
-        $areas = app('model.location.area')->all();
+        $areas = sys('model.location.area')->all();
         $areas_list = ['' => 'None'];
         foreach($areas as $area){
             $areas_list[$area->id] = $area->name;
         }
 
-        $preset_locations = app('model.location.preset')->all();
+        $preset_locations = sys('model.location.preset')->all();
         $preset_location_list = ['' => 'None'];
         foreach($preset_locations as $preset_location){
             $preset_location_list[$preset_location->id] = $preset_location->title;
@@ -96,7 +96,7 @@ trait LocationTrait
     }
 
     public function manualPresetLocationField($default = false){
-        $item = app('model.location.preset')->findOrFail($default);
+        $item = sys('model.location.preset')->findOrFail($default);
 
         return view('acciones.complain.partial.form.location_park', [
             'item' => $item,
@@ -106,7 +106,7 @@ trait LocationTrait
     public function getLatlngFromGoogle($q = false){
         $q = !$q ? Input::get('address') : $q;
 
-        $req = app('Curl')->to('https://maps.googleapis.com/maps/api/geocode/json')
+        $req = sys('Curl')->to('https://maps.googleapis.com/maps/api/geocode/json')
             ->withData([
                 'language' => config('csys.lang'),
                 'address' => $this->createAddressFromStreetID($q['street_id'], (isset($q['street_number'])?
@@ -121,7 +121,7 @@ trait LocationTrait
 
     public function createAddressFromStreetID($id, $number)
     {
-        $street = app('model.location.street')->findOrFail($id);
+        $street = sys('model.location.street')->findOrFail($id);
         return (!empty($number) ? $number . ' ' : '') . $street->name . ', '
             . $street->block->name . ', ' . $street->block->area->name . ', '
             . config('csys.coverage.data.' . config('csys.coverage.type'))
@@ -131,7 +131,7 @@ trait LocationTrait
     public function getAddressFromGoogle($q = false){
         $q = !$q ? Input::get('latlng') : $q;
 
-        $req = app('Curl')->to('https://maps.googleapis.com/maps/api/geocode/json')
+        $req = sys('Curl')->to('https://maps.googleapis.com/maps/api/geocode/json')
             ->withData([
                 'language' => config('csys.lang'),
                 'latlng' => $q

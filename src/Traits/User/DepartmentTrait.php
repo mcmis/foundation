@@ -12,7 +12,7 @@ trait DepartmentTrait
     public function departments()
     {
         $employees_id = $this->employee->lists('id')->toArray();
-        return app('model.company.department')->whereHas('employees', function ($query) use ($employees_id) {
+        return sys('model.company.department')->whereHas('employees', function ($query) use ($employees_id) {
             $query->whereIn('employees.id', $employees_id);
         })->get();
     }

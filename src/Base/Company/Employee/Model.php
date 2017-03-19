@@ -13,6 +13,8 @@ class Model extends BaseModel
     use AttributesTrait;
     use SoftDeletes;
 
+    protected $table = 'employees';
+
     protected $fillable = [
         'first_name', 'last_name', 'dob', 'joining_date', 'shortcode', 'email', 'phone', 'ext', 'mobile',
         'designation_id', 'gender'
@@ -26,22 +28,22 @@ class Model extends BaseModel
     /**** Relationships ****/
     public function designation()
     {
-        return $this->belongsTo(app('model.company.designation'));
+        return $this->belongsTo(sys('model.company.designation'));
     }
 
     public function departments()
     {
-        return $this->belongsToMany(app('model.company.department'), 'employee_department');
+        return $this->belongsToMany(sys('model.company.department'), 'employee_department');
     }
 
     public function contacts()
     {
-        return $this->hasMany(app('model.company.employee.contact'));
+        return $this->hasMany(sys('model.company.employee.contact'));
     }
 
     public function users()
     {
-        return $this->belongsToMany(app('model.user'), 'employee_user')->withTrashed();
+        return $this->belongsToMany(sys('model.user'), 'employee_user')->withTrashed();
     }
 
 }

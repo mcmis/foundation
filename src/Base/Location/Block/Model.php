@@ -11,11 +11,11 @@ class Model extends BaseModel
 
     public function area()
     {
-        return $this->belongsTo(app('model.location.area'), 'area_id');
+        return $this->belongsTo(sys('model.location.area'), 'area_id');
     }
 
     public function streets()
     {
-        return $this->hasMany(app('model.location.street'), 'block_id');
+        return $this->hasMany(sys('model.location.street'), 'block_id');
     }
 }

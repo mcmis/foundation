@@ -6,6 +6,9 @@ use MCMIS\Foundation\BaseModel;
 
 class Model extends BaseModel
 {
+
+    protected $table = 'complaint_category_options';
+
     protected $fillable = [
         'complaint_id', 'complain_category_option_id', 'value'
     ];
@@ -14,11 +17,11 @@ class Model extends BaseModel
 
     public function complaint()
     {
-        return $this->belongsTo(app('model.complain'), 'complaint_id');
+        return $this->belongsTo(sys('model.complain'), 'complaint_id');
     }
 
     public function option()
     {
-        return $this->belongsTo(app('model.category.option'), 'complain_category_option_id');
+        return $this->belongsTo(sys('model.category.option'), 'complain_category_option_id');
     }
 }

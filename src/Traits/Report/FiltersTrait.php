@@ -16,7 +16,7 @@ trait FiltersTrait
         $user_is_super = $filters_data_container['user_is_super'] = $user->hasDepartments();
 
         if ($user->hasRole('admin')) {
-            $sources_raw = app('model.source')->all();
+            $sources_raw = sys('model.source')->all();
             $sources = ['' => 'All'];
             foreach ($sources_raw as $source) {
                 $sources[$source->id] = $source->title;
@@ -34,7 +34,7 @@ trait FiltersTrait
                 $filters_data_container['departments'] = $departments;
             }
 
-            $fieldworkers_raw = app('model.company.employee')->whereHas('users', function ($query) {
+            $fieldworkers_raw = sys('model.company.employee')->whereHas('users', function ($query) {
                 $query->whereHas('roles', function ($query) {
                     $query->where('name', '=', 'fieldworker');
                 });
@@ -48,21 +48,21 @@ trait FiltersTrait
             $filters_data_container['fieldworkers'] = $fieldworkers;
 
             if (!$user_is_super) {
-                $colonies_raw = app('model.complain.location')->select('area')->groupBy('area')->get();
+                $colonies_raw = sys('model.complain.location')->select('area')->groupBy('area')->get();
                 $colonies = ['' => 'All'];
                 foreach ($colonies_raw as $colony) {
                     $colonies[$colony->area] = $colony->area;
                 }
                 $filters_data_container['colonies'] = $colonies;
 
-                $blocks_raw = app('model.complain.location')->select('block')->groupBy('block')->get();
+                $blocks_raw = sys('model.complain.location')->select('block')->groupBy('block')->get();
                 $blocks = ['' => 'All'];
                 foreach ($blocks_raw as $block) {
                     $blocks[$block->block] = $block->block;
                 }
                 $filters_data_container['blocks'] = $blocks;
 
-                $streets_raw = app('model.complain.location')->select('street')->groupBy('street')->get();
+                $streets_raw = sys('model.complain.location')->select('street')->groupBy('street')->get();
                 $streets = ['' => 'All'];
                 foreach ($streets_raw as $street) {
                     $streets[$street->street] = $street->street;
@@ -72,8 +72,8 @@ trait FiltersTrait
         }
 
         if (Auth::user()->hasRole('supervisor') || Auth::user()->hasRole('fieldworker')) {
-            $no_child_cat = app('model.category')->whereDoesntHave('children')->where('parent', '=', 0)->get()->lists('id');
-            $filtered_categories = app('model.category')->where('parent', '>', '0')
+            $no_child_cat = sys('model.category')->whereDoesntHave('children')->where('parent', '=', 0)->get()->lists('id');
+            $filtered_categories = sys('model.category')->where('parent', '>', '0')
                 ->orWhere(function ($query) use ($no_child_cat) {
                     $query->whereIn('id', $no_child_cat->toArray());
                 })->get();
@@ -82,7 +82,7 @@ trait FiltersTrait
                 $categories[$category->id] = $category->title;
             }
             $filters_data_container['categories'] = $categories;
-            $statuses_raw = app('model.status')->whereIn('short_code',
+            $statuses_raw = sys('model.status')->whereIn('short_code',
                 $this->workflow->canView(Auth::user()->hasRole('supervisor') ? 'supervisor' : 'fieldworker'))
                 ->orderBy('id')->get();
             $statuses = ['' => 'All'];
@@ -162,7 +162,7 @@ trait FiltersTrait
 
     public function filteredComplaints($categories = [], $status = [])
     {
-        $output = app('model.complain')->where(function ($query) use ($categories) {
+        $output = sys('model.complain')->where(function ($query) use ($categories) {
             $query->whereIn('category_id', $categories)
                 ->orWhereIn('child_category_id', $categories);
         })->whereIn('status', $status);

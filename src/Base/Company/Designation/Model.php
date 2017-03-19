@@ -13,14 +13,16 @@ class Model extends BaseModel
         'title', 'description'
     ];
 
+    protected $table = 'designations';
+
     /*** Relationship ***/
     public function roles()
     {
-        return $this->belongsToMany(app('model.user.role'), 'designation_role');
+        return $this->belongsToMany(sys('model.user.role'), 'designation_role');
     }
 
     public function employees()
     {
-        return $this->hasMany(app('model.company.employee'));
+        return $this->hasMany(sys('model.company.employee'));
     }
 }

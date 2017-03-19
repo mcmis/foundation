@@ -9,6 +9,8 @@ class Model extends BaseModel
 {
     use SoftDeletes;
 
+    protected $table = 'user_disability_types';
+
     protected $fillable = [
         'name'
     ];

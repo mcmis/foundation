@@ -7,13 +7,15 @@ use MCMIS\Foundation\BaseModel;
 class Model extends BaseModel
 {
     public $timestamps = false;
+
     protected $table = 'complaints_unassigned';
+
     protected $fillable = [
         'complaint_id'
     ];
 
     public function complaint()
     {
-        return $this->belongsTo(app('model.complain'));
+        return $this->belongsTo(sys('model.complain'));
     }
 }

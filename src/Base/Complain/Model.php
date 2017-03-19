@@ -49,86 +49,86 @@ class Model extends BaseModel
 
     public function user()
     {
-        return $this->belongsTo(app('model.user'))->withTrashed();
+        return $this->belongsTo(sys('model.user'))->withTrashed();
     }
 
     /* TODO: Source User table will be created seprate source_user */
     public function creator()
     {
-        return $this->belongsToMany(app('model.user'), 'complaint_sources', 'complaint_id', 'creator_id')->withTrashed();
+        return $this->belongsToMany(sys('model.user'), 'complaint_sources', 'complaint_id', 'creator_id')->withTrashed();
     }
 
     public function category()
     {
-        return $this->belongsTo(app('model.category'), 'category_id')->withTrashed();
+        return $this->belongsTo(sys('model.category'), 'category_id')->withTrashed();
     }
 
     /* This relational field altered by separate migration */
     public function childCategory()
     {
-        return $this->belongsTo(app('model.category'), 'child_category_id')->withTrashed();
+        return $this->belongsTo(sys('model.category'), 'child_category_id')->withTrashed();
     }
 
     //Many to many relation due to reference table involved complaint_sources
     public function sources()
     {
-        return $this->belongsToMany(app('model.source'), 'complaint_sources', 'complaint_id', 'source_id');
+        return $this->belongsToMany(sys('model.source'), 'complaint_sources', 'complaint_id', 'source_id');
     }
 
     public function comments()
     {
-        return $this->hasMany(app('model.comment'));
+        return $this->hasMany(sys('model.complain.comment'));
     }
 
     public function photos()
     {
-        return $this->hasMany(app('model.complain.photo'));
+        return $this->hasMany(sys('model.complain.photo'));
     }
 
     public function documents()
     {
-        return $this->hasMany(app('model.complain.document'));
+        return $this->hasMany(sys('model.complain.document'));
     }
 
     public function state()
     {
-        return $this->belongsTo(app('model.status'), 'status');
+        return $this->belongsTo(sys('model.status'), 'status');
     }
 
     public function location()
     {
-        return $this->hasOne(app('model.complain.location'), 'complaint_id');
+        return $this->hasOne(sys('model.complain.location'), 'complaint_id');
     }
 
     public function assignments()
     {
-        return $this->hasMany(app('model.complain.assignment'));
+        return $this->hasMany(sys('model.complain.assignment'));
     }
 
     public function unassigned()
     {
-        return $this->hasMany(app('model.complain.unassigned'));
+        return $this->hasMany(sys('model.complain.unassigned'));
     }
 
     public function options()
     {
-        return $this->hasMany(app('model.complain.option'), 'complaint_id');
+        return $this->hasMany(sys('model.complain.option'), 'complaint_id');
     }
 
     public function request()
     {
-        return $this->hasOne(app('model.complain.log'), 'complain_no', 'complain_no');
+        return $this->hasOne(sys('model.complain.log'), 'complain_no', 'complain_no');
     }
 
     //related
     public function children()
     {
-        return $this->belongsToMany(app('model.complain'), 'complaint_sub_complaint', 'complaint_id', 'child_id');
+        return $this->belongsToMany(sys('model.complain'), 'complaint_sub_complaint', 'complaint_id', 'child_id');
     }
 
     //grouped of complaints
     public function parent()
     {
-        return $this->belongsToMany(app('model.complain'), 'complaint_sub_complaint', 'child_id', 'complaint_id');
+        return $this->belongsToMany(sys('model.complain'), 'complaint_sub_complaint', 'child_id', 'complaint_id');
     }
 }

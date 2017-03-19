@@ -17,12 +17,12 @@ class Model extends BaseModel
 
     public function complaint()
     {
-        return $this->belongsTo(app('model.complain'));
+        return $this->belongsTo(sys('model.complain'));
     }
 
     public function presetLocation()
     {
-        return $this->belongsTo(app('model.location.preset'), 'preset_location_id');
+        return $this->belongsTo(sys('model.location.preset'), 'preset_location_id');
     }
 
 }

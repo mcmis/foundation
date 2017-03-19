@@ -12,6 +12,6 @@ class Model extends BaseModel
 
     public function block()
     {
-        return $this->belongsTo(app('model.location.block'), 'block_id');
+        return $this->belongsTo(sys('model.location.block'), 'block_id');
     }
 }

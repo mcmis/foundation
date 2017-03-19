@@ -21,7 +21,7 @@ trait DocumentTrait
                         $request->request->set('uri', $name);
                     else $request->request->add(['uri' => $name]);
                     $request->request->set('caption', $document->getClientOriginalName());
-                    app('model.complain.document')->create($request->only(['uri', 'complaint_id', 'user_id', 'caption']));
+                    sys('model.complain.document')->create($request->only(['uri', 'complaint_id', 'user_id', 'caption']));
                 }
             }
         }

@@ -8,13 +8,15 @@ class Model extends EntrustRole
 {
     use ScopesTrait;
 
+    protected $table = 'roles';
+
     protected $fillable = [
         'name', 'display_name', 'description'
     ];
 
     public function designations()
     {
-        return $this->belongsToMany(app('model.company.designation'), 'designation_role');
+        return $this->belongsToMany(sys('model.company.designation'), 'designation_role');
     }
 
 }

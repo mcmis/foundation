@@ -25,7 +25,7 @@ trait AttributesTrait
                 . $this->location->city
                 . ((config('csys.coverage.type') != 'country') ? ', ' . config('csys.coverage.data.country') : '');
         $marker = $this->childCategory ? $this->childCategory->static_map_marker : ($this->category ? $this->category->static_map_marker : '');
-        return '<img src="https://maps.googleapis.com/maps/api/staticmap?key=' . Config::get('csys.googlemaps.static_key') . '&center=' . $coord . '&markers=icon: ' . $marker . '|' . $coord . '&zoom=17&size=300x300&sensor=false" class="complaint-list-map-image" />';
+        return '<img src="https://maps.googleapis.com/maps/api/staticmap?key=' . config('csys.googlemaps.static_key') . '&center=' . $coord . '&markers=icon: ' . $marker . '|' . $coord . '&zoom=17&size=300x300&sensor=false" class="complaint-list-map-image" />';
     }
 
     public function setExpectedCompletedOnAttribute($value)

@@ -5,11 +5,14 @@ namespace MCMIS\Foundation\Base\Complain\Comment;
 
 use MCMIS\Foundation\BaseModel;
 use MCMIS\Foundation\Traits\Complain\Comment\AttributesTrait;
+use MCMIS\Foundation\Traits\Complain\Comment\ScopesTrait;
 
 class Model extends BaseModel
 {
 
-    use AttributesTrait;
+    use AttributesTrait, ScopesTrait;
+
+    protected $table = 'complaint_comments';
 
     protected $fillable = [
         'complaint_id', 'user_id', 'msg', 'privacy', 'reply_of', 'priority', 'status', 'last_status', 'serial',
@@ -36,16 +39,16 @@ class Model extends BaseModel
 
     public function complaint()
     {
-        return $this->belongsTo(app('model.complain'));
+        return $this->belongsTo(sys('model.complain'));
     }
 
     public function user()
     {
-        return $this->belongsTo(app('model.user'), 'user_id')->withTrashed();
+        return $this->belongsTo(sys('model.user'), 'user_id')->withTrashed();
     }
 
     public function state()
     {
-        return $this->belongsTo(app('model.status'), 'status');
+        return $this->belongsTo(sys('model.status'), 'status');
     }
 }

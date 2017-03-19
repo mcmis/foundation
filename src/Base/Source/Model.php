@@ -9,12 +9,14 @@ class Model extends BaseModel
 {
     use SoftDeletes;
 
+    protected $table = 'complain_sources';
+
     protected $fillable = [
         'title', 'description', 'location'
     ];
 
     public function complaints()
     {
-        return $this->belongsToMany(app('model.complain'), 'complaint_sources', 'source_id');
+        return $this->belongsToMany(sys('model.complain'), 'complaint_sources', 'source_id');
     }
 }

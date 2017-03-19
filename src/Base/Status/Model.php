@@ -16,11 +16,11 @@ class Model extends BaseModel
 
     public function complaints()
     {
-        return $this->hasMany(app('model.complain'), 'status');
+        return $this->hasMany(sys('model.complain'), 'status');
     }
 
     public function comments()
     {
-        return $this->hasMany(app('model.complain.comment'), 'status');
+        return $this->hasMany(sys('model.complain.comment'), 'status');
     }
 }

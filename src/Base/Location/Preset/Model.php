@@ -9,6 +9,8 @@ class Model extends BaseModel
 {
     use SoftDeletes;
 
+    protected $table = 'preset_locations';
+
     protected $fillable = [
         'title', 'area_id', 'block_id', 'street_id', 'street_id_another', 'city',
         'street_number', 'references',
@@ -16,21 +18,21 @@ class Model extends BaseModel
 
     public function area()
     {
-        return $this->belongsTo(app('model.location.area'), 'area_id')->withTrashed();
+        return $this->belongsTo(sys('model.location.area'), 'area_id')->withTrashed();
     }
 
     public function block()
     {
-        return $this->belongsTo(app('model.location.block'), 'block_id');
+        return $this->belongsTo(sys('model.location.block'), 'block_id');
     }
 
     public function street()
     {
-        return $this->belongsTo(app('model.location.street'), 'street_id');
+        return $this->belongsTo(sys('model.location.street'), 'street_id');
     }
 
     public function street_another()
     {
-        return $this->belongsTo(app('model.location.street'), 'street_id_another');
+        return $this->belongsTo(sys('model.location.street'), 'street_id_another');
     }
 }
