@@ -25,9 +25,7 @@
             "MCMIS\\Foundation\\": "src/"
         }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.8.x-dev"
-        }
-    }
+  "config": {
+    "preferred-install": "dist"
+  }
 }
