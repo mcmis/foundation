@@ -2,7 +2,7 @@
 namespace MCMIS\Foundation;
 
 
-class DependencyProviders
+class DependenciesRepository
 {
 
     protected $app;

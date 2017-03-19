@@ -19,7 +19,7 @@ class ModelsRepository
 
     protected function withBootstrap()
     {
-        (new DependencyProviders($this->app))->register();
+        (new DependenciesRepository($this->app))->register();
     }
 
     public function load($models)
