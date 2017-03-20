@@ -1,6 +1,6 @@
 <?php
 
-namespace MCMIS\Foundation\Container;
+namespace MCMIS\Foundation\Containers;
 
 
 use Illuminate\Support\Facades\Auth;
