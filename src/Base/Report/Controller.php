@@ -1,10 +1,6 @@
 <?php
 namespace MCMIS\Foundation\Base\Report;
 
-
-use MCMIS\Contracts\WorkFlow;
-use MCMIS\Contracts\Report\ModelFiltration;
-use MCMIS\Contracts\ExporterExtenders\ReportExporterExtender;
 use MCMIS\Foundation\BaseController;
 use MCMIS\Foundation\Traits\Report\ExportTrait;
 use MCMIS\Foundation\Traits\Report\FiltersTrait;
@@ -16,10 +12,12 @@ class Controller extends BaseController
 
     protected $workflow, $filtered_model, $exporter;
 
-    public function __construct(WorkFlow $workFlow, ModelFiltration $filtered_model, ReportExporterExtender $exporter)
-    {
-        $this->workflow = $workFlow;
-        $this->filtered_model = $filtered_model;
-        $this->exporter = $exporter;
-    }
+    /**
+     *   Load dependencies on construction:
+     *
+     *`  MCMIS\Contracts\WorkFlow
+     *   MCMIS\Contracts\Report\ModelFiltration
+     *   MCMIS\Contracts\ExporterExtenders\ReportExporterExtender
+    */
+
 }
