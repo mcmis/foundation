@@ -1,8 +1,9 @@
 <?php
 namespace MCMIS\Foundation;
 
+use MCMIS\Contracts\Foundation\Repository;
 
-class ModelsRepository
+class ModelsRepository implements Repository
 {
 
     protected $app;
@@ -22,10 +23,10 @@ class ModelsRepository
         (new DependenciesRepository($this->app))->register();
     }
 
-    public function load($models)
+    public function load($repo)
     {
-        $this->models = $models;
-        foreach ($models as $alias => $model) {
+        $this->models = $repo;
+        foreach ($repo as $alias => $model) {
             $this->register($alias);
         }
     }

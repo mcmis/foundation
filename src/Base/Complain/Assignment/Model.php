@@ -3,8 +3,9 @@ namespace MCMIS\Foundation\Base\Complain\Assignment;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MCMIS\Foundation\BaseModel;
+use MCMIS\Contracts\Foundation\Model\ComplainAssignmentContract;
 
-class Model extends BaseModel
+class Model extends BaseModel implements ComplainAssignmentContract
 {
     use SoftDeletes;
 

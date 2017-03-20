@@ -3,8 +3,9 @@
 namespace MCMIS\Foundation\Base\Status;
 
 use MCMIS\Foundation\BaseModel;
+use MCMIS\Contracts\Foundation\Model\StatusContract;
 
-class Model extends BaseModel
+class Model extends BaseModel implements StatusContract
 {
     public $timestamps = false;
 

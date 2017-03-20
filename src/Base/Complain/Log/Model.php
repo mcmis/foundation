@@ -4,8 +4,9 @@ namespace MCMIS\Foundation\Base\Complain\Log;
 
 use MCMIS\Foundation\BaseModel;
 use MCMIS\Foundation\Traits\Complain\Log\AttributesTrait;
+use MCMIS\Contracts\Foundation\Model\ComplainLogContract;
 
-class Model extends BaseModel
+class Model extends BaseModel implements ComplainLogContract
 {
     use AttributesTrait;
 

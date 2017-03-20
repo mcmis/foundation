@@ -2,8 +2,9 @@
 namespace MCMIS\Foundation\Base\Complain\Document;
 
 use MCMIS\Foundation\BaseModel;
+use MCMIS\Contracts\Foundation\Model\ComplainDocumentContract;
 
-class Model extends BaseModel
+class Model extends BaseModel implements ComplainDocumentContract
 {
 
     protected $table = 'complaint_documents';

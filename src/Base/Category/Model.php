@@ -4,10 +4,11 @@ namespace MCMIS\Foundation\Base\Category;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MCMIS\Foundation\BaseModel;
+use MCMIS\Contracts\Foundation\Model\CategoryContract;
 use MCMIS\Foundation\Traits\Category\AttributesTrait;
 use MCMIS\Foundation\Traits\Category\ScopesTrait;
 
-class Model extends BaseModel
+class Model extends BaseModel implements CategoryContract
 {
 
     use AttributesTrait, ScopesTrait;

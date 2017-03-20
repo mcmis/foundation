@@ -3,8 +3,9 @@
 namespace MCMIS\Foundation\Base\Complain\Photo;
 
 use MCMIS\Foundation\BaseModel;
+use MCMIS\Contracts\Foundation\Model\ComplainPhotoContract;
 
-class Model extends BaseModel
+class Model extends BaseModel implements ComplainPhotoContract
 {
 
     protected $table = 'complaint_photos';

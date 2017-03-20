@@ -3,8 +3,9 @@
 namespace MCMIS\Foundation\Base\Complain\Option;
 
 use MCMIS\Foundation\BaseModel;
+use MCMIS\Contracts\Foundation\Model\ComplainOptionContract;
 
-class Model extends BaseModel
+class Model extends BaseModel implements ComplainOptionContract
 {
 
     protected $table = 'complaint_category_options';

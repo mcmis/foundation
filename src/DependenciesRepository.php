@@ -1,8 +1,9 @@
 <?php
 namespace MCMIS\Foundation;
 
+use MCMIS\Contracts\Foundation\Repository;
 
-class DependenciesRepository
+class DependenciesRepository implements Repository
 {
 
     protected $app;
@@ -20,6 +21,10 @@ class DependenciesRepository
     public function __construct($app)
     {
         $this->app = $app;
+    }
+
+    public function load($repo){
+        //
     }
 
     public function register()

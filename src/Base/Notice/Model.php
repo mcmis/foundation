@@ -4,8 +4,9 @@ namespace MCMIS\Foundation\Base\Notice;
 
 
 use MCMIS\Foundation\BaseModel;
+use MCMIS\Contracts\Foundation\Model\NoticeContract;
 
-class Model extends BaseModel
+class Model extends BaseModel implements NoticeContract
 {
 
     protected $table = 'user_notices';

@@ -3,10 +3,11 @@
 namespace MCMIS\Foundation\Base\Avatar;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use MCMIS\Contracts\Foundation\Model\AvatarContract;
 use MCMIS\Foundation\BaseModel;
 use MCMIS\Foundation\Traits\Avatar\AttributesTrait;
 
-class Model extends BaseModel
+class Model extends BaseModel implements AvatarContract
 {
     use AttributesTrait;
     use SoftDeletes;

@@ -2,10 +2,10 @@
 
 namespace MCMIS\Foundation\Base\Company\Employee\Contact;
 
-
 use MCMIS\Foundation\BaseModel;
+use MCMIS\Contracts\Foundation\Model\EmployeeContactContract;
 
-class Model extends BaseModel
+class Model extends BaseModel implements EmployeeContactContract
 {
 
     protected $table = 'employee_contacts';

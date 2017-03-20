@@ -6,8 +6,9 @@ namespace MCMIS\Foundation\Base\Complain\Comment;
 use MCMIS\Foundation\BaseModel;
 use MCMIS\Foundation\Traits\Complain\Comment\AttributesTrait;
 use MCMIS\Foundation\Traits\Complain\Comment\ScopesTrait;
+use MCMIS\Contracts\Foundation\Model\ComplainCommentContract;
 
-class Model extends BaseModel
+class Model extends BaseModel implements ComplainCommentContract
 {
 
     use AttributesTrait, ScopesTrait;

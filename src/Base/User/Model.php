@@ -9,8 +9,9 @@ use Illuminate\Support\Facades\Cache;
 use MCMIS\Foundation\Traits\User\AttributesTrait;
 use MCMIS\Foundation\Traits\User\DepartmentTrait;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
+use MCMIS\Contracts\Foundation\Model\UserContract;
 
-class Model extends Authenticatable
+class Model extends Authenticatable implements UserContract
 {
 
     use SoftDeletes, EntrustUserTrait {
