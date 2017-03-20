@@ -2,8 +2,8 @@
 namespace MCMIS\Foundation\Base\Report;
 
 
-use MCMIS\Contacts\WorkFlow;
-use MCMIS\Contacts\Report\ModelFiltration;
+use MCMIS\Contracts\WorkFlow;
+use MCMIS\Contracts\Report\ModelFiltration;
 use MCMIS\Contracts\ExporterExtenders\ReportExporterExtender;
 use MCMIS\Foundation\BaseController;
 use MCMIS\Foundation\Traits\Report\ExportTrait;
