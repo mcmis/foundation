@@ -17,6 +17,9 @@ class Register
         $app->singleton('models', function($app){
             return new ModelsRepository($app);
         });
+
+        /* bind */
+        $app->bind('MCMIS\Contracts\Report\ModelFiltration', 'MCMIS\Foundation\Containers\ModelFiltration');
     }
 
 }
