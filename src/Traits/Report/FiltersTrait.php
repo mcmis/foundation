@@ -83,7 +83,7 @@ trait FiltersTrait
             }
             $filters_data_container['categories'] = $categories;
             $statuses_raw = sys('model.status')->whereIn('short_code',
-                $this->workflow->canView(Auth::user()->hasRole('supervisor') ? 'supervisor' : 'fieldworker'))
+                sys('MCMIS\Contracts\Workflow')->canView(Auth::user()->hasRole('supervisor') ? 'supervisor' : 'fieldworker'))
                 ->orderBy('id')->get();
             $statuses = ['' => 'All'];
             foreach ($statuses_raw as $status) {

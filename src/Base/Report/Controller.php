@@ -10,14 +10,4 @@ class Controller extends BaseController
 {
     use FiltersTrait, StatsTrait, ExportTrait;
 
-    protected $workflow, $filtered_model, $exporter;
-
-    /**
-     *   Load dependencies on construction:
-     *
-     *`  MCMIS\Contracts\WorkFlow
-     *   MCMIS\Contracts\Report\ModelFiltration
-     *   MCMIS\Contracts\ExporterExtenders\ReportExporterExtender
-    */
-
 }

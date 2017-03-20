@@ -5,7 +5,6 @@ namespace MCMIS\Foundation\Traits\Complain;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
 
 trait ExportComplaintsExcel
 {
@@ -27,7 +26,7 @@ trait ExportComplaintsExcel
             DB::raw('IFNULL((select CONCAT(complaint_location.street_number, ", ", complaint_location.street, ", ", complaint_location.block, ", ", complaint_location.area) from complaint_location where complaint_location.complaint_id = complaint.id), "") as address'),
             'complaint.created_at as created')->get()->toArray();
 
-        Excel::create("Complaints-$status-$department", function($excel) use ($rows) {
+        sys('excel')->create("Complaints-$status-$department", function($excel) use ($rows) {
 
             $excel->setTitle('Complaints list');
 
