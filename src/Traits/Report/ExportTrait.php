@@ -7,11 +7,12 @@ trait ExportTrait
 
     public function doExport($data, $chart = null)
     {
+        $extender = sys('MCMIS\Contracts\ExporterExtenders\ReportExporterExtender');
         if ($chart) {
-            $this->extender->enableChart();
+            $extender->enableChart();
         }
 
-        $this->extender->export($data);
+        $extender->export($data);
     }
 
 }
