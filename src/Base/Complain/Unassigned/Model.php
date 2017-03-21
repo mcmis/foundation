@@ -3,9 +3,9 @@
 namespace MCMIS\Foundation\Base\Complain\Unassigned;
 
 use MCMIS\Foundation\BaseModel;
-use MCMIS\Contracts\Foundation\Model\ComplainUnassignedContract;
+use MCMIS\Contracts\Foundation\Model\ComplainUnassigned;
 
-class Model extends BaseModel implements ComplainUnassignedContract
+class Model extends BaseModel implements ComplainUnassigned
 {
     public $timestamps = false;
 

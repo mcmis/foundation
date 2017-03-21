@@ -6,12 +6,12 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use MCMIS\Foundation\BaseModel;
-use MCMIS\Contracts\Foundation\Model\ComplainContract;
+use MCMIS\Contracts\Foundation\Model\Complain;
 use MCMIS\Foundation\Traits\Complain\AttributesTrait;
 use MCMIS\Foundation\Traits\Complain\FamilyTrait;
 use MCMIS\Foundation\Traits\Complain\ScopesTrait;
 
-class Model extends BaseModel implements ComplainContract
+class Model extends BaseModel implements Complain
 {
     use ScopesTrait, AttributesTrait, FamilyTrait;
     use SoftDeletes;

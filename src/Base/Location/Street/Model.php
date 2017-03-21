@@ -3,9 +3,9 @@
 namespace MCMIS\Foundation\Base\Location\Street;
 
 use MCMIS\Foundation\BaseModel;
-use MCMIS\Contracts\Foundation\Model\LocationStreetContract;
+use MCMIS\Contracts\Foundation\Model\LocationStreet;
 
-class Model extends BaseModel implements LocationStreetContract
+class Model extends BaseModel implements LocationStreet
 {
     protected $table = 'ls_streets';
 

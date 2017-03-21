@@ -3,9 +3,9 @@
 namespace MCMIS\Foundation\Base\User\Notice;
 
 use MCMIS\Foundation\BaseModel;
-use MCMIS\Contracts\Foundation\Model\UserNoticeContract;
+use MCMIS\Contracts\Foundation\Model\UserNotice;
 
-class Model extends BaseModel implements UserNoticeContract
+class Model extends BaseModel implements UserNotice
 {
 
     protected $table = 'user_notice_receivers';

@@ -4,9 +4,9 @@ namespace MCMIS\Foundation\Base\Company\Department;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MCMIS\Foundation\BaseModel;
-use MCMIS\Contracts\Foundation\Model\DepartmentContract;
+use MCMIS\Contracts\Foundation\Model\Department;
 
-class Model extends BaseModel implements DepartmentContract
+class Model extends BaseModel implements Department
 {
     use SoftDeletes;
 

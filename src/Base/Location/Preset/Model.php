@@ -4,9 +4,9 @@ namespace MCMIS\Foundation\Base\Location\Preset;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MCMIS\Foundation\BaseModel;
-use MCMIS\Contracts\Foundation\Model\LocationPresetContract;
+use MCMIS\Contracts\Foundation\Model\LocationPreset;
 
-class Model extends BaseModel implements LocationPresetContract
+class Model extends BaseModel implements LocationPreset
 {
     use SoftDeletes;
 

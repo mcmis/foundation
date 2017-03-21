@@ -3,9 +3,9 @@ namespace MCMIS\Foundation\Base\Location\Area;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MCMIS\Foundation\BaseModel;
-use MCMIS\Contracts\Foundation\Model\LocationAreaContract;
+use MCMIS\Contracts\Foundation\Model\LocationArea;
 
-class Model extends BaseModel implements LocationAreaContract
+class Model extends BaseModel implements LocationArea
 {
     use SoftDeletes;
 

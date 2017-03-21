@@ -2,9 +2,9 @@
 namespace MCMIS\Foundation\Base\Location\Block;
 
 use MCMIS\Foundation\BaseModel;
-use MCMIS\Contracts\Foundation\Model\LocationBlockContract;
+use MCMIS\Contracts\Foundation\Model\LocationBlock;
 
-class Model extends BaseModel implements LocationBlockContract
+class Model extends BaseModel implements LocationBlock
 {
     protected $table = 'ls_blocks';
     protected $fillable = ['name', 'area_id'];

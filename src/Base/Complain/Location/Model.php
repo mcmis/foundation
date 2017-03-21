@@ -2,9 +2,9 @@
 namespace MCMIS\Foundation\Base\Complain\Location;
 
 use MCMIS\Foundation\BaseModel;
-use MCMIS\Contracts\Foundation\Model\ComplainLocationContract;
+use MCMIS\Contracts\Foundation\Model\ComplainLocation;
 
-class Model extends BaseModel implements ComplainLocationContract
+class Model extends BaseModel implements ComplainLocation
 {
 
     protected $table = 'complaint_location';

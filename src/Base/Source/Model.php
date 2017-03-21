@@ -4,9 +4,9 @@ namespace MCMIS\Foundation\Base\Source;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MCMIS\Foundation\BaseModel;
-use MCMIS\Contracts\Foundation\Model\SourceContract;
+use MCMIS\Contracts\Foundation\Model\Source;
 
-class Model extends BaseModel implements SourceContract
+class Model extends BaseModel implements Source
 {
     use SoftDeletes;
 

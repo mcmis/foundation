@@ -6,9 +6,9 @@ namespace MCMIS\Foundation\Base\Company\Employee;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use MCMIS\Foundation\BaseModel;
 use MCMIS\Foundation\Traits\Company\Employee\AttributesTrait;
-use MCMIS\Contracts\Foundation\Model\EmployeeContract;
+use MCMIS\Contracts\Foundation\Model\Employee;
 
-class Model extends BaseModel implements EmployeeContract
+class Model extends BaseModel implements Employee
 {
 
     use AttributesTrait;
