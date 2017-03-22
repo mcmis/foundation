@@ -42,6 +42,6 @@ class Model extends BaseModel implements Category
 
     public function options()
     {
-        return $this->hasMany(sys('model.complain.option'), 'complain_category_id');
+        return $this->hasMany(sys('model.category.option'), 'complain_category_id');
     }
 }
