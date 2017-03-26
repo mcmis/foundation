@@ -6,6 +6,8 @@ use MCMIS\Foundation\BaseModel;
 
 class Model extends BaseModel
 {
+    protected $table = 'email_template_events';
+
     protected $fillable = [
         'title', 'alias'
     ];

@@ -28,6 +28,6 @@ class Controller extends BaseController
             flash()->success(trans('alert.email.template.updated', ['subject' => $request->subject, 'event' => $event]));
         else flash()->error(trans('alert.email.template.update.fail', ['event' => $event]));
 
-        return redirect()->action('MCMIS\Foundation\Base\Email\Event\Template\Controller@index');
+        return redirect()->route('email.event.templates');
     }
 }
