@@ -20,6 +20,6 @@ class Model extends BaseModel implements Avatar
 
     public function users()
     {
-        return $this->belongsToMany(sys('model.user'), 'avatar_user');
+        return $this->belongsToMany(sys('model.user'), 'avatar_user', 'avatar_id', 'user_id');
     }
 }

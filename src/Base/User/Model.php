@@ -69,7 +69,7 @@ class Model extends Authenticatable implements User
 
     public function avatar()
     {
-        return $this->belongsToMany(sys('model.avatar'), 'avatar_user');
+        return $this->belongsToMany(sys('model.avatar'), 'avatar_user', 'user_id', 'avatar_id');
     }
 
     public function employee()
