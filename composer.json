@@ -12,7 +12,6 @@
     "require": {
         "php": ">=5.5.9",
       "mcmis/base": "0.5.*",
-      "mcmis/plugin-localizer" : ">=0.3 <1.1",
       "farhanwazir/laravelgooglemaps": "^2.3",
       "laracasts/flash": "^2.0",
       "ixudra/curl": "^6.4",

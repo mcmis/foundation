@@ -16,7 +16,6 @@ class DependenciesRepository implements Repository
         'Ixudra\Curl\CurlServiceProvider',
         'FarhanWazir\GoogleMaps\GMapsServiceProvider',
         'Khill\Lavacharts\Laravel\LavachartsServiceProvider',
-        'Barryvdh\TranslationManager\ManagerServiceProvider', //dependency required mcmis/plugin-localizer
     ];
 
     public function __construct($app)
