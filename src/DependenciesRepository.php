@@ -16,6 +16,7 @@ class DependenciesRepository implements Repository
         'Ixudra\Curl\CurlServiceProvider',
         'FarhanWazir\GoogleMaps\GMapsServiceProvider',
         'Khill\Lavacharts\Laravel\LavachartsServiceProvider',
+        'Barryvdh\TranslationManager\ManagerServiceProvider',
     ];
 
     public function __construct($app)
