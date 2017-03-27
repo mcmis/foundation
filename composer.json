@@ -11,17 +11,20 @@
     ],
     "require": {
         "php": ">=5.5.9",
-        "mcmis/base" : "0.5.*@dev"
+      "mcmis/base": "0.5.*",
+      "farhanwazir/laravelgooglemaps": "^2.3",
+      "laracasts/flash": "^2.0",
+      "ixudra/curl": "^6.4",
+      "intervention/image": "^2.3",
+      "intervention/imagecache": "^2.3",
+      "zizaco/entrust": "^1.7"
     },
     "autoload": {
         "psr-4": {
             "MCMIS\\Foundation\\": "src/"
         }
     },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "0.8.x-dev"
-        }
-    },
-    "minimum-stability": "dev"
+  "config": {
+    "preferred-install": "dist"
+  }
 }

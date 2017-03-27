@@ -1,8 +1,9 @@
 <?php
 namespace MCMIS\Foundation;
 
+use MCMIS\Contracts\Foundation\Repository;
 
-class ModelsRepository
+class ModelsRepository implements Repository
 {
 
     protected $app;
@@ -14,19 +15,20 @@ class ModelsRepository
     public function __construct($app)
     {
         $this->app = $app;
+        $this->withBootstrap();
     }
 
-    public function load($models)
+    protected function withBootstrap()
     {
-        $this->models = $models;
-        foreach ($models as $alias => $model) {
+        (new DependenciesRepository($this->app))->register();
+    }
+
+    public function load($repo)
+    {
+        $this->models = $repo;
+        foreach ($repo as $alias => $model) {
             $this->register($alias);
         }
-    }
-
-    public function has($model)
-    {
-        return isset($this->models[$model]) && !is_null($this->models[$model]);
     }
 
     public function register($model)
@@ -48,17 +50,22 @@ class ModelsRepository
         return $this->registeredModels[$key] = 'model.' . $key;
     }
 
-    public function isRegistered($model)
-    {
-        return isset($this->registeredModels[$model]);
-    }
-
     protected function furnishBaseNamespace($model)
     {
         $extracted_name = implode('\\', array_map(function($val){
             return studly_case($val);
         }, explode('.', $model)));
         return 'MCMIS\Foundation\Base\\' . $extracted_name . '\Model';
+    }
+
+    public function has($model)
+    {
+        return isset($this->models[$model]) && !is_null($this->models[$model]);
+    }
+
+    public function isRegistered($model)
+    {
+        return isset($this->registeredModels[$model]);
     }
 
 }

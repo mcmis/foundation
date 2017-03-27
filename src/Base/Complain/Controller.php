@@ -2,7 +2,6 @@
 
 namespace MCMIS\Foundation\Base\Complain;
 
-
 use MCMIS\Foundation\Traits\Complain\DocumentTrait;
 use MCMIS\Foundation\Traits\Complain\ListingTrait;
 use MCMIS\Foundation\Traits\Complain\LocationTrait;
@@ -11,7 +10,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use MCMIS\Foundation\Traits\Complain\ExportComplaintsExcel;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Foundation\Bus\DispatchesJobs;
 use Auth;
 use MCMIS\Foundation\BaseController;
 
@@ -23,7 +21,7 @@ class Controller extends BaseController
     protected $workflow;
 
     public function categoryOptionFields($default = false){
-        $items = app('model.category.option')->where('complain_category_id', '=', $default)->get();
+        $items = sys('model.category.option')->where('complain_category_id', '=', $default)->get();
 
         return view('acciones.complain.partial.form.category_options', [
             'options' => $items,
@@ -35,7 +33,7 @@ class Controller extends BaseController
      * @return mixed
      */
     public function search(Request $keyword){
-        $item = app('model.complain')->where('complain_no', '=', $keyword->input('complain_no'));
+        $item = sys('model.complain')->where('complain_no', '=', $keyword->input('complain_no'));
         if(Auth::user()->hasRole('fieldworker'))
             $item = $item->leftJoin('complaint_assignments', 'complaint_assignments.complaint_id', '=', 'complaint.id')
                 ->whereIn('complaint_assignments.employee_id', (count($employees = Auth::user()->employee->lists('id')->toArray()) ? $employees : [0]));
@@ -59,7 +57,7 @@ class Controller extends BaseController
      * @return mixed
      */
     public function updateStatus($complaint, $id){
-        $complain = app('model.complain')->where('complain_no', $complaint)
+        $complain = sys('model.complain')->where('complain_no', $complaint)
             ->update(['status' => $id]);
 
         if($complain)
@@ -71,17 +69,17 @@ class Controller extends BaseController
     }
 
     public function complaintCounter(){
-        return app('model.status')->withCount(['complaints' => function($query){
+        return sys('model.status')->withCount(['complaints' => function ($query) {
             $query->where('seen', '=', false);
         }])->get()->toArray();
     }
 
     public function complaintsUnassignedCounter(){
-        return app('model.unassignment')->count();
+        return sys('model.complain.unassigned')->count();
     }
 
     public function seen($complain_no){
-        return app('model.complain')->where('complain_no', '=', $complain_no)->update(['seen' => true]);
+        return sys('model.complain')->where('complain_no', '=', $complain_no)->update(['seen' => true]);
     }
 
     public function timeline($complaint){
