@@ -31,14 +31,15 @@ class Model extends BaseModel implements Complain
 
         static::saving(function ($post) {
             if (empty($post->attributes['complain_no'])) {
-                $total_today_complains = parent::where(DB::raw('date(created_at)'), '=', Carbon::now()->format('Y-m-d'))->count();
                 /*Complain no schema 1
                     DDMMYYYY + (total complaints + 1) + random numeric digit + random numeric digit*/
+                //$total_today_complains = parent::where(DB::raw('date(created_at)'), '=', Carbon::now()->format('Y-m-d'))->count();
                 //$post->attributes['complain_no'] = Carbon::now()->format('jny') . ($total_today_complains + 1) . rand(0, 9) . rand(0, 9);
 
                 /*Complain no schema 2
                     MM + hyphen "-" symbol + total complaints + 1 (total complaints + 1 should be in 5 digit format like 00005) */
-                $post->attributes['complain_no'] = Carbon::now()->format('m') . '-' . str_pad($total_today_complains + 1, 5, 0, STR_PAD_LEFT);
+                $total_month_complains = parent::where(DB::raw('month(created_at)'), '=', Carbon::now()->format('n'))->count();
+                $post->attributes['complain_no'] = Carbon::now()->format('m') . '-' . str_pad($total_month_complains + 1, 5, 0, STR_PAD_LEFT);
             }
 
             if (empty($post->attributes['status'])) {

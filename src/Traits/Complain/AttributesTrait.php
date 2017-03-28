@@ -8,12 +8,6 @@ use Illuminate\Support\Facades\DB;
 trait AttributesTrait
 {
 
-    public function setComplainNoAttribute($value)
-    {
-        $total_today_complains = $this->where(DB::raw('date(created_at)'), '=', Carbon::now()->format('Y-m-d'))->count();
-        $this->attributes['complain_no'] = Carbon::now()->format('jny') . ($total_today_complains + 1) . rand(0, 9) . rand(0, 9);
-    }
-
     public function getMapImageAttribute()
     {
         $coord = '';
