@@ -82,6 +82,22 @@ trait ListingTrait
         if ($request->has('dates')) {
             $items = $items->whereBetween('complaint.created_at', app(Controller::class)->filterDateRange($request->dates));
         }
+        if($request->has('name'))
+            $items = $items->whereHas('user', function($q) use ($request){
+                $q->where('name', 'like', '%'.$request->name.'%');
+            });
+        if($request->has('email'))
+            $items = $items->whereHas('user', function($q) use ($request){
+                $q->where('email', '=', $request->email);
+            });
+        if($request->has('mobile'))
+            $items = $items->whereHas('user', function($q) use ($request){
+                $q->where('mobile', '=', $request->mobile);
+            });
+        if($request->has('complain_no'))
+            $items = $items->where('complain_no', '=', $request->complain_no);
+        if($request->has('external_ref'))
+            $items = $items->where('external_ref', '=', $request->external_ref);
         return $items;
     }
 
