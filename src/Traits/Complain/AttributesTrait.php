@@ -66,4 +66,14 @@ trait AttributesTrait
         return $this->attributes['reschedule_on'] ? Carbon::parse($this->attributes['reschedule_on'])->format('m/d/Y') : '';
     }
 
+    public function getRegisteredTimeAttribute()
+    {
+        return $this->attributes['created_at'] ? Carbon::parse($this->attributes['created_at'])->format('G:m') : '';
+    }
+
+    public function getRegisteredOnAttribute()
+    {
+        return $this->attributes['created_at'] ? Carbon::parse($this->attributes['created_at'])->format('m/d/Y G:m') : '';
+    }
+
 }
