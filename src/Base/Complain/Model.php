@@ -39,7 +39,7 @@ class Model extends BaseModel implements Complain
                 /*Complain no schema 2
                     MM + hyphen "-" symbol + total complaints + 1 (total complaints + 1 should be in 5 digit format like 00005) */
                 $total_month_complains = parent::where(DB::raw('month(created_at)'), '=', Carbon::now()->format('n'))->count();
-                $post->attributes['complain_no'] = Carbon::now()->format('m') . '-' . str_pad($total_month_complains + 1, 5, 0, STR_PAD_LEFT);
+                $post->attributes['complain_no'] = str_pad($total_month_complains + 1, 5, 0, STR_PAD_LEFT) . '-' . Carbon::now()->format('jny') ;
             }
 
             if (empty($post->attributes['status'])) {
