@@ -79,6 +79,18 @@ trait ListingTrait
             $items = $items->whereHas('location', function ($q) use ($request) {
                 $q->where('street', '=', $request->street);
             });
+        if ($request->has('street_another'))
+            $items = $items->whereHas('location', function ($q) use ($request) {
+                $q->where('street_another', '=', $request->street_another);
+            });
+        if ($request->has('corner_street'))
+            $items = $items->whereHas('location', function ($q) use ($request) {
+                $q->where('corner_street', '=', $request->corner_street);
+            });
+        if ($request->has('corner_street_another'))
+            $items = $items->whereHas('location', function ($q) use ($request) {
+                $q->where('corner_street_another', '=', $request->corner_street_another);
+            });
         if ($request->has('dates')) {
             $items = $items->whereBetween('complaint.created_at', app(Controller::class)->filterDateRange($request->dates));
         }
