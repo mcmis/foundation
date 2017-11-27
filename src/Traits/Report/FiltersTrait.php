@@ -15,9 +15,9 @@ trait FiltersTrait
         $user = $filters_data_container['user'] = Auth::user();
         $user_is_super = $filters_data_container['user_is_super'] = $user->hasDepartments();
 
-        if ($user->hasRole('admin')) {
+        if ($user->hasRole('admin') || $user->hasRole('supervisor')) {
             $sources_raw = sys('model.source')->all();
-            $sources = ['' => 'All'];
+            $sources = ['' => 'Todos'];
             foreach ($sources_raw as $source) {
                 $sources[$source->id] = $source->title;
             }
@@ -27,7 +27,7 @@ trait FiltersTrait
         if ($user->hasRole('supervisor')) {
             if ($user_is_super) {
                 $departments_raw = $user->departments();
-                $departments = ['' => 'All'];
+                $departments = ['' => 'Todos'];
                 foreach ($departments_raw as $department) {
                     $departments[$department->id] = $department->name;
                 }
@@ -41,29 +41,29 @@ trait FiltersTrait
             })->whereHas('departments', function ($dquery) use ($user) {
                 $dquery->whereIn('departments.id', $user->departments()->lists('id')->toArray());
             })->get();
-            $fieldworkers = ['' => 'All'];
+            $fieldworkers = ['' => 'Todos'];
             foreach ($fieldworkers_raw as $fieldworker) {
                 $fieldworkers[$fieldworker->id] = $fieldworker->first_name . ' ' . $fieldworker->last_name . '(' . $fieldworker->departments->implode('name', ',') . ')';
             }
             $filters_data_container['fieldworkers'] = $fieldworkers;
 
-            if (!$user_is_super) {
+            if ($user_is_super) {
                 $colonies_raw = sys('model.complain.location')->select('area')->groupBy('area')->get();
-                $colonies = ['' => 'All'];
+                $colonies = ['' => 'Todos'];
                 foreach ($colonies_raw as $colony) {
                     $colonies[$colony->area] = $colony->area;
                 }
                 $filters_data_container['colonies'] = $colonies;
 
                 $blocks_raw = sys('model.complain.location')->select('block')->groupBy('block')->get();
-                $blocks = ['' => 'All'];
+                $blocks = ['' => 'Todos'];
                 foreach ($blocks_raw as $block) {
                     $blocks[$block->block] = $block->block;
                 }
                 $filters_data_container['blocks'] = $blocks;
 
                 $streets_raw = sys('model.complain.location')->select('street')->groupBy('street')->get();
-                $streets = ['' => 'All'];
+                $streets = ['' => 'Todos'];
                 foreach ($streets_raw as $street) {
                     $streets[$street->street] = $street->street;
                 }
@@ -77,7 +77,7 @@ trait FiltersTrait
                 ->orWhere(function ($query) use ($no_child_cat) {
                     $query->whereIn('id', $no_child_cat->toArray());
                 })->get();
-            $categories = ['' => 'All'];
+            $categories = ['' => 'Todos'];
             foreach ($filtered_categories as $category) {
                 $categories[$category->id] = $category->title;
             }
@@ -86,7 +86,7 @@ trait FiltersTrait
             $statuses_raw = sys('model.status')->whereIn('short_code',
                 sys('MCMIS\Contracts\Workflow')->canView(Auth::user()->hasRole('supervisor') ? 'supervisor' : 'fieldworker'))
                 ->orderBy('id')->get();
-            $statuses = ['' => 'All'];
+            $statuses = ['' => 'Todos'];
             foreach ($statuses_raw as $status) {
                 $statuses[$status->id] = $status->title;
             }
@@ -104,6 +104,7 @@ trait FiltersTrait
                     ->where('complaint_sources.source_id', '=', $request->source);
             });
         }
+
         if ($request->has('department')) {
             $model = $model->whereExists(function ($query) use ($request) {
                 $query->select(DB::raw(1))->from('complaint_assignments')
@@ -120,6 +121,14 @@ trait FiltersTrait
         }
         if ($request->has('complainer')) {
             $model = $model->where('complaint.user_id', '=', $request->complainer);
+        }
+
+        if ($request->has('recievedate')) {
+            $model = $model->where(DB::raw("DATE_FORMAT(complaint.created_at, '%M %d %Y')"), '=', date('Y-m-d', strtotime($request->recievedate)) );
+        }
+
+        if ($request->has('complainnumber')) {
+            $model = $model->where('complaint.complain_no', '=', $request->complainnumber);
         }
 
         if ($request->has('dates')) {
@@ -147,6 +156,19 @@ trait FiltersTrait
                 $query->select(DB::raw(1))->from('complaint_location')
                     ->whereRaw('complaint_location.complaint_id = complaint.id
                     and complaint_location.street = "' . $request->street . '"');
+            });
+        }
+
+        if ($request->has('gender') || $request->has('applicantname')) {
+            $model = $model->join('users', function ($join) use ($request) {
+                $join->on('complaint.user_id', '=', 'users.id');
+                if ($request->has('applicantname')) {
+                    $join->where('users.name', 'like', '%'.$request->applicantname.'%');
+                }
+
+                if ($request->has('gender')) {
+                    $join->where('users.gender', '=', ucfirst($request->gender));
+                }
             });
         }
 
