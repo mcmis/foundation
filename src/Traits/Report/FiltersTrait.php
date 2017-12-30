@@ -104,7 +104,6 @@ trait FiltersTrait
                     ->where('complaint_sources.source_id', '=', $request->source);
             });
         }
-
         if ($request->has('department')) {
             $model = $model->whereExists(function ($query) use ($request) {
                 $query->select(DB::raw(1))->from('complaint_assignments')
@@ -121,14 +120,6 @@ trait FiltersTrait
         }
         if ($request->has('complainer')) {
             $model = $model->where('complaint.user_id', '=', $request->complainer);
-        }
-
-        if ($request->has('recievedate')) {
-            $model = $model->where(DB::raw("DATE_FORMAT(complaint.created_at, '%M %d %Y')"), '=', date('Y-m-d', strtotime($request->recievedate)) );
-        }
-
-        if ($request->has('complainnumber')) {
-            $model = $model->where('complaint.complain_no', '=', $request->complainnumber);
         }
 
         if ($request->has('dates')) {
@@ -156,19 +147,6 @@ trait FiltersTrait
                 $query->select(DB::raw(1))->from('complaint_location')
                     ->whereRaw('complaint_location.complaint_id = complaint.id
                     and complaint_location.street = "' . $request->street . '"');
-            });
-        }
-
-        if ($request->has('gender') || $request->has('applicantname')) {
-            $model = $model->join('users', function ($join) use ($request) {
-                $join->on('complaint.user_id', '=', 'users.id');
-                if ($request->has('applicantname')) {
-                    $join->where('users.name', 'like', '%'.$request->applicantname.'%');
-                }
-
-                if ($request->has('gender')) {
-                    $join->where('users.gender', '=', ucfirst($request->gender));
-                }
             });
         }
 

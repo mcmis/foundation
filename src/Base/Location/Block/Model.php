@@ -11,11 +11,11 @@ class Model extends BaseModel implements LocationBlock
 
     public function area()
     {
-        return $this->belongsTo(sys('model.location.area'), 'area_id');
+        return $this->belongsTo(sys('model.location.area'), 'area_id')->orderBy('name');
     }
 
     public function streets()
     {
-        return $this->hasMany(sys('model.location.street'), 'block_id');
+        return $this->hasMany(sys('model.location.street'), 'block_id')->orderBy('name');
     }
 }

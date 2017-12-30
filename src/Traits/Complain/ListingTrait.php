@@ -37,6 +37,8 @@ trait ListingTrait
         if($pagination) $items = $items->paginate(config('csys.settings.pagination.complaints'));
         else $items = $items->get();
 
+
+
         return view('acciones.complain.list', array_merge([
             'items' => $items->appends($request->except('page')),
             'complaints_counter' => $this->complaintCounter(),
@@ -47,6 +49,7 @@ trait ListingTrait
 
     public function queryFilter(Builder $query, Request $request)
     {
+
         $items = $query;
         if ($request->has('source'))
             $items = $items->whereHas('sources', function ($q) use ($request) {
@@ -165,6 +168,8 @@ trait ListingTrait
 
     public function filters(Request $request)
     {
+
+
         /*filter data*/
         $filters_data_container = [];
         $user = $filters_data_container['user'] = Auth::user();
@@ -172,7 +177,7 @@ trait ListingTrait
 
         if ($user->hasRole('operator')) {
             $sources_raw = sys('model.source')->get();
-            $sources = ['' => 'All'];
+            $sources = ['' => 'Todos'];
             foreach ($sources_raw as $source) {
                 $sources[$source->id] = $source->title;
             }
@@ -181,7 +186,7 @@ trait ListingTrait
             $operators_raw = sys('model.user')->whereHas('roles', function ($query) { //commented, it will make problem in lots of user scenario
                 $query->where('name', '=', 'operator');
             })->has('employee')->get();
-            $operators = ['' => 'All'];
+            $operators = ['' => 'Todos'];
             foreach ($operators_raw as $operator) {
                 $operators[$operator->id] = $operator->name;
             }
@@ -196,7 +201,7 @@ trait ListingTrait
             })->whereHas('departments', function ($q) {
                 $q->whereIn('departments.id', Auth::user()->departments()->pluck('id'));
             })->get();
-            $fieldworkers = ['' => 'All'];
+            $fieldworkers = ['' => 'Todos'];
             foreach ($fieldworkers_raw as $fieldworker) {
                 $fieldworkers[$fieldworker->id] = $fieldworker->name . ' (' . $fieldworker->shortcode . ')';
             }
@@ -204,26 +209,46 @@ trait ListingTrait
         }
 
         if ($user->hasRole('supervisor') || $user->hasRole('fieldworker')) {
-            $colonies_raw = sys('model.complain.location')->select('area')->groupBy('area')->get();
-            $colonies = ['' => 'All'];
+            /*$colonies_raw = sys('model.complain.location')->select('area')->groupBy('area')->get();
+            $colonies = ['' => 'Todos'];
             foreach ($colonies_raw as $colony) {
                 $colonies[$colony->area] = $colony->area;
-            }
+            }*/
+			$colonies_raw = sys('model.location.area')->select('name')->groupBy('name')->get();
+			$colonies = ['' => 'Todos'];
+			foreach ($colonies_raw as $colony) {
+				$colonies[$colony->name] = $colony->name;
+			}
             $filters_data_container['colonies'] = $colonies;
 
             $blocks_raw = sys('model.complain.location')->select('block')->groupBy('block')->get();
-            $blocks = ['' => 'All'];
+            $blocks = ['' => 'Todos'];
             foreach ($blocks_raw as $block) {
                 $blocks[$block->block] = $block->block;
             }
             $filters_data_container['blocks'] = $blocks;
 
+            $area_raw = sys('model.complain.location')->select('area')->groupBy('area')->get();
+            $areas = ['' => 'Todos'];
+            foreach ($area_raw as $area) {
+                $areas[$area->area] = $area->area;
+            }
+            $filters_data_container['areas'] = $areas;
+
             $streets_raw = sys('model.complain.location')->select('street')->groupBy('street')->get();
-            $streets = ['' => 'All'];
+            $streets = ['' => 'Todos'];
             foreach ($streets_raw as $street) {
                 $streets[$street->street] = $street->street;
             }
             $filters_data_container['streets'] = $streets;
+
+            $streets_no_raw = sys('model.complain.location')->select('street_number')->groupBy('street_number')->get();
+            $streets_no = ['' => 'Todos'];
+            foreach ($streets_no_raw as $street_no) {
+                $streets_no[$street_no->street_number] = $street_no->street_number;
+            }
+            $filters_data_container['streets_no'] = $streets_no;
+
         }
 
         if ($user->hasRole('fieldworker') || $user_is_super) {
@@ -232,12 +257,14 @@ trait ListingTrait
                 ->orWhere(function ($query) use ($no_child_cat) {
                     $query->whereIn('id', $no_child_cat->toArray());
                 })->get();
-            $categories = ['' => 'All'];
+            $categories = ['' => 'Todos'];
             foreach ($filtered_categories as $category) {
                 $categories[$category->id] = $category->title;
             }
             $filters_data_container['categories'] = $categories;
         }
+
+
 
         $filters_data_container['filters'] = $request->all();
 
