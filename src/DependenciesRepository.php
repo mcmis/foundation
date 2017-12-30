@@ -12,7 +12,8 @@ class DependenciesRepository implements Repository
         /** TODO: Add dependency service providers */
         'Laracasts\Flash\FlashServiceProvider',
         'Intervention\Image\ImageServiceProvider',
-        'Zizaco\Entrust\EntrustServiceProvider',
+        //'Zizaco\Entrust\EntrustServiceProvider',
+        'MCMIS\Support\AlteredProviders\EntrustPatchServiceProvider',
         'Ixudra\Curl\CurlServiceProvider',
         'FarhanWazir\GoogleMaps\GMapsServiceProvider',
         'Khill\Lavacharts\Laravel\LavachartsServiceProvider',
