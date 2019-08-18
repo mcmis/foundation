@@ -75,13 +75,14 @@ trait LocationTrait
 
     public function manualLocationField($default = false){
         $areas = sys('model.location.area')->all();
-        $areas_list = ['' => 'None'];
+        $areas_list = ['' => 'Ninguna'];
         foreach($areas as $area){
             $areas_list[$area->id] = $area->name;
         }
 
+
         $preset_locations = sys('model.location.preset')->all();
-        $preset_location_list = ['' => 'None'];
+        $preset_location_list = ['' => 'Ninguna'];
         foreach($preset_locations as $preset_location){
             $preset_location_list[$preset_location->id] = $preset_location->title;
         }
@@ -91,7 +92,7 @@ trait LocationTrait
             'areas' => $areas_list,
             'blocks' => [],
             'streets' => [],
-            'city' => config('csys.coverage.data.city'),
+            'city' => 'Ciudad de México, CDMX',
         ]);
     }
 
@@ -106,11 +107,67 @@ trait LocationTrait
     public function getLatlngFromGoogle($q = false){
         $q = !$q ? Input::get('address') : $q;
 
+        $address_search = '';
+
+        if (isset($q['otra_calle']) && $q['otra_calle'] != '') {
+        	$address_search = $q['otra_calle'] . ', ';
+			if (isset($q['street_number'])) {
+				$address_search .= $q['street_number'] . ' ';
+			}
+
+			if (isset($q['area_id'])) {
+				$area = sys('model.location.area')->findOrFail($q['area_id']);
+
+				$address_search .= $area->name . ', ';
+			}
+
+			$address_search .= '03100 Ciudad de México, CDMX ';
+			/*$address_search = (!empty($q['street_number']) ? $q['street_number'] . ' ' : '') . $q['otra_calle'] . ', ';
+			$address_search .= config('csys.coverage.data.' . config('csys.coverage.type'))
+				. ((config('csys.coverage.type') != 'country') ? ', ' . config('csys.coverage.data.country') : '');*/
+		} else {
+
+			if (isset($q['block_id'])) {
+				$block = sys('model.location.block')->findOrFail($q['block_id']);
+
+				$address_search = 'Calle  ';
+				$address_search .= $block->name . ', ';
+			} else if (isset($q['street_id'])) {
+				$street = sys('model.location.street')->findOrFail($q['street_id']);
+
+				$address_search = 'Calle  ';
+				$address_search .= $street->name . ', ';
+			}
+
+			if (isset($q['street_number'])) {
+				$address_search .= $q['street_number'] . ' ';
+			}
+
+			if (isset($q['area_id'])) {
+				$area = sys('model.location.area')->findOrFail($q['area_id']);
+
+				$address_search .= $area->name . ', ';
+			}
+
+			$address_search .= '03100 Ciudad de México, CDMX ';
+		}
+
+		/*$address_search .= config('csys.coverage.data.' . config('csys.coverage.type'))
+			. ((config('csys.coverage.type') != 'country') ? ', ' . config('csys.coverage.data.country') : '');*/
+
+        /*if (isset($q['street_id_another']) && $q['street_id_another'] != '') {
+        	$address_search = $this->createAddressFromStreetID($q['street_id_another'], (isset($q['street_number'])? $q['street_number'] : ''));
+		} else {
+			$address_search = (!empty($q['street_number']) ? $q['street_number'] . ' ' : '') . $q['otra_calle'] . ', '
+				. config('csys.coverage.data.' . config('csys.coverage.type'))
+				. ((config('csys.coverage.type') != 'country') ? ', ' . config('csys.coverage.data.country') : '');;
+		}*/
+
         $req = sys('Curl')->to('https://maps.googleapis.com/maps/api/geocode/json')
             ->withData([
                 'language' => config('csys.lang'),
-                'address' => $this->createAddressFromStreetID($q['street_id'], (isset($q['street_number'])?
-                    $q['street_number'] : ''))
+                'address' => $address_search,
+				'key' => 'AIzaSyDq50Ber0w5W8NJ_B3sReEN-VinvKDinOw'
             ])
             ->withOption('SSL_VERIFYPEER', false)
             ->asJson()
@@ -134,7 +191,8 @@ trait LocationTrait
         $req = sys('Curl')->to('https://maps.googleapis.com/maps/api/geocode/json')
             ->withData([
                 'language' => config('csys.lang'),
-                'latlng' => $q
+                'latlng' => $q,
+				'key' => 'AIzaSyDq50Ber0w5W8NJ_B3sReEN-VinvKDinOw'
             ])
             ->withOption('SSL_VERIFYPEER', false)
             ->asJson()
@@ -142,5 +200,33 @@ trait LocationTrait
         if($req && $req->status == "OK") return response()->json($req->results[0]->formatted_address);
         return false;
     }
+
+	public function getZipCodeFromGoogle($q = false){
+		$q = !$q ? Input::get('latlng') : $q;
+
+		$req = sys('Curl')->to('https://maps.googleapis.com/maps/api/geocode/json')
+			->withData([
+				'language' => config('csys.lang'),
+				'latlng' => $q,
+				'key' => 'AIzaSyDq50Ber0w5W8NJ_B3sReEN-VinvKDinOw'
+			])
+			->withOption('SSL_VERIFYPEER', false)
+			->asJson()
+			->get();
+		if($req && $req->status == "OK"){
+			$zip = '03100';
+			$zip_code = $req->results[0]->address_components;
+
+			for ($i=0; $i<count($zip_code); $i++) {
+				if ($zip_code[$i]->types[0] == 'postal_code') {
+					$zip = $zip_code[$i]->long_name;
+					break;
+				}
+			}
+
+			return response()->json($zip);
+		}
+		return false;
+	}
 
 }

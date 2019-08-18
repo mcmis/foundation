@@ -23,7 +23,7 @@ trait AttributesTrait
 
     public function getAgeAttribute()
     {
-        return $this->attributes['age'] ? Carbon::parse($this->attributes['age'])->format('m/d/Y') : null;
+        return $this->attributes['age'] ? Carbon::parse($this->attributes['age'])->format('d/m/Y') : null;
     }
 
 }

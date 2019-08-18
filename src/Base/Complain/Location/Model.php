@@ -11,7 +11,7 @@ class Model extends BaseModel implements ComplainLocation
 
     protected $fillable = [
         'complaint_id', 'area', 'block', 'street', 'street_another',
-        'references', 'street_number', 'city',
+        'references', 'street_number', 'otra_calle', 'zip_code', 'city',
         'preset_location_id', 'corner_street', 'corner_street_another'
     ];
 

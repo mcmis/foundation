@@ -33,7 +33,10 @@ class Controller extends BaseController
      * @return mixed
      */
     public function search(Request $keyword){
-        $item = sys('model.complain')->where('complain_no', '=', $keyword->input('complain_no'));
+        $search_keyword = trim($keyword->input('complain_no'), "-");
+       // $item = sys('model.complain')->where('complain_no', 'like', $search_keyword.'%');
+        $item = sys('model.complain')->whereRAW("(replace(complain_no, '-', '') LIKE '".$search_keyword."%' or complain_no = '".$search_keyword."')");
+        //dd(Auth::user()->hasRole('fieldworker'));
         if(Auth::user()->hasRole('fieldworker'))
             $item = $item->leftJoin('complaint_assignments', 'complaint_assignments.complaint_id', '=', 'complaint.id')
                 ->whereIn('complaint_assignments.employee_id', (count($employees = Auth::user()->employee->lists('id')->toArray()) ? $employees : [0]));
@@ -46,7 +49,8 @@ class Controller extends BaseController
         $item = $item->first();
 
         if(!$item){
-            return redirect()->back()->withErrors('Complain #' . $keyword->input('complain_no') . ' not found', 'complain')->withInput();
+            //return redirect()->back()->withErrors('Complain #' . $keyword->input('complain_no') . ' not found', 'complain')->withInput();
+            return redirect()->back()->withErrors('Número de solicitud no registrado', 'complain')->withInput();
         }
         return redirect()->route('complain', $item->complain_no);
     }

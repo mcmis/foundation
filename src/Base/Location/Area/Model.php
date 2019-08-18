@@ -15,6 +15,6 @@ class Model extends BaseModel implements LocationArea
 
     public function blocks()
     {
-        return $this->hasMany(sys('model.location.block'), 'area_id');
+        return $this->hasMany(sys('model.location.block'), 'area_id')->orderBy('name');
     }
 }

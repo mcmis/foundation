@@ -49,6 +49,43 @@ trait BarTrait
             'chartArea' => ['width' => '92%', 'height' => '70%'],
             'isStacked' => true
         ]);
+
+        //dd($linechart_dataTable);
+
+        /////////// MY WORK ///////////////
+
+        $reasons = \Lava::DataTable();
+
+        $reasons->addStringColumn('Status')->addNumberColumn('Percent');
+        //dd($stats['output']['status']);
+        $status_count = array();
+        foreach ($stats['output']['status'] as $key => $data){
+            $cat = '';
+            $cnt = 0;
+            foreach ($data as $key_inner => $inner_data){
+                if($key_inner == 0){
+                    $cat = $inner_data;
+                }else{
+                    $cnt = $cnt + $inner_data;
+                }
+
+            }
+            $status_count[$cat] = $cnt;
+        }
+
+        foreach ($status_count as $key => $pie_chart){
+            $reasons->addRow([$key, $pie_chart]);
+
+        }
+
+        \Lava::PieChart('Status', $reasons, [
+            'legend' => ['position' => 'top'],
+            //'orientation' => 'horizontal',
+            'chartArea' => ['width' => '92%', 'height' => '70%'],
+            'isStacked' => true
+        ]);
+
+
         /* END LAVACHART */
     }
 }
